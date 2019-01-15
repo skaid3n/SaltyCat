@@ -15,23 +15,37 @@ public class SaltyCat extends Application {
     @Override
   public void start(Stage stage){
   
-    Image image = new Image("fondoBueno.png");
+    Image imageFondo = new Image("fondo.png");
     ImageView fondoJuego = new ImageView();
-    fondoJuego.setImage(image);
-//    fondoJuego.setScaleX(2);
-//    fondoJuego.setScaleY(2);
+    fondoJuego.setImage(imageFondo);
+    
+    Image imageCaminar = new Image ("catWalk.gif");
+    ImageView gatoCaminar = new ImageView();
+    gatoCaminar.setImage(imageCaminar);
+    
+    gatoCaminar.setScaleX(3);
+    gatoCaminar.setScaleY(3);
  
     
     Group root = new Group();
+    
     Scene scene = new Scene(root);
     scene.setFill(Color.BLACK);
+    
+    // Fondo
     HBox prueba = new HBox();
     prueba.getChildren().add(fondoJuego);
     root.getChildren().add(prueba);
     
+    // Gato movimiento
+    HBox gatoMovimiento = new HBox();
+    gatoMovimiento.getChildren().add(gatoCaminar);
+    root.getChildren().add(gatoMovimiento);
+    
+    
     stage.setTitle("Salty Cats");
-    stage.setWidth(1200);
-    stage.setHeight(650);
+    stage.setWidth(1024);
+    stage.setHeight(768);
     stage.setScene(scene); 
     stage.sizeToScene(); 
     stage.show();
