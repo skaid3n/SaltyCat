@@ -43,7 +43,7 @@ public class SaltyCat extends Application {
     root.getChildren().add(gatoMovimiento);
     
     
-    stage.setTitle("Salty Cats");
+    stage.setTitle("Salty Cats");sss
     stage.setWidth(1024);
     stage.setHeight(768);
     stage.setScene(scene); 
