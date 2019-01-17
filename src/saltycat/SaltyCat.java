@@ -1,5 +1,6 @@
 package saltycat;
 
+import javafx.animation.AnimationTimer;
  import javafx.application.Application;
  import javafx.geometry.Rectangle2D;
  import javafx.scene.Group;
@@ -7,18 +8,69 @@ package saltycat;
  import javafx.scene.image.Image;
  import javafx.scene.image.ImageView;
  import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
  import javafx.scene.paint.Color;
  import javafx.stage.Stage; 
 
 public class SaltyCat extends Application {
-    
+
+int posicionX= 1024;
+int posicionY= 768;
+
+int pos1Fondo= 0;
+int pos2Fondo1= 1024;
+
+
+int velocidad= -2 ;
+
+
     @Override
   public void start(Stage stage){
+      
+    Group root = new Group();
+    Scene scene = new Scene(root, posicionX, posicionY);
+    stage.setTitle("Salty Cats");
+    stage.setScene(scene);
+    stage.show();
   
-      // Fondo 1
+      // Imagen y grupo de fondo
     Image imageFondo = new Image("fondo.png");
     ImageView fondoJuego = new ImageView();
+    ImageView fondoJuego1 = new ImageView();
+    
     fondoJuego.setImage(imageFondo);
+    fondoJuego1.setImage(imageFondo);
+    
+    fondoJuego.setFitWidth(1024);
+    fondoJuego.setFitHeight(768);
+    fondoJuego1.setFitWidth(1024);
+    fondoJuego1.setFitHeight(768);
+    
+    root.getChildren().add(fondoJuego);
+    root.getChildren().add(fondoJuego1);
+    
+    AnimationTimer animationFondo = new AnimationTimer(){
+    @Override
+    public void handle (long now){
+        fondoJuego.setX(pos1Fondo);
+        fondoJuego1.setX(pos2Fondo1);
+        pos1Fondo+=velocidad;
+        pos2Fondo1+=velocidad;
+        
+        if (pos1Fondo >= 1023){
+            
+                   
+        }
+        
+        }
+    };
+    animationFondo.start();
+    
+    
+    
+//    HBox fondo1= new HBox();
+//    fondo1.getChildren().add(fondoJuego);
+//    root.getChildren().add(fondo1);
     
      // Fondo 2
     Image imageFondoCamino = new Image("fondoCamino.png");
@@ -57,14 +109,6 @@ public class SaltyCat extends Application {
     
     
      // Creacion de grupos
-    Group root = new Group();
-    Scene scene = new Scene(root);
-    scene.setFill(Color.BLACK);
-    
-    // Fondo 1
-    HBox fondo1= new HBox();
-    fondo1.getChildren().add(fondoJuego);
-    root.getChildren().add(fondo1);
     
     // Fondo 2
     HBox fondo2 = new HBox();
@@ -100,12 +144,12 @@ public class SaltyCat extends Application {
     gallinaChicken.setLayoutY(600);
     root.getChildren().add(gallinaChicken);
     
-    stage.setTitle("Salty Cats");
-    stage.setWidth(1024);
-    stage.setHeight(768);
-    stage.setScene(scene); 
-    stage.sizeToScene(); 
-    stage.show();
+//    stage.setTitle("Salty Cats");
+//    stage.setWidth(1024);
+//    stage.setHeight(768);
+//    stage.setScene(scene); 
+//    stage.sizeToScene(); 
+//    stage.show();
   }
   
   public static void main(String[] args) {
