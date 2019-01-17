@@ -7,6 +7,7 @@ import javafx.animation.AnimationTimer;
  import javafx.scene.Scene; 
  import javafx.scene.image.Image;
  import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
  import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
  import javafx.scene.paint.Color;
@@ -20,8 +21,12 @@ int posicionY= 768;
 int pos1Fondo= 0;
 int pos2Fondo1= 1024;
 
+int pos1FondoCamino= 0;
+int pos2FondoCamino= 1024;
+
 
 int velocidad= -2 ;
+int velocidadCamino = -4;
 
 
     @Override
@@ -33,7 +38,7 @@ int velocidad= -2 ;
     stage.setScene(scene);
     stage.show();
   
-      // Imagen y grupo de fondo
+      // Imagen fondo montañas 
     Image imageFondo = new Image("fondo.png");
     ImageView fondoJuego = new ImageView();
     ImageView fondoJuego1 = new ImageView();
@@ -49,33 +54,80 @@ int velocidad= -2 ;
     root.getChildren().add(fondoJuego);
     root.getChildren().add(fondoJuego1);
     
+        
+       // Fondo Camino 
+    Image imageFondoCamino = new Image("fondoCamino.png");
+    ImageView fondoCamino = new ImageView();
+    ImageView fondoCamino1 = new ImageView();
+    
+    fondoCamino.setImage(imageFondoCamino);
+    fondoCamino1.setImage(imageFondoCamino);
+    
+    fondoCamino.setFitWidth(1024);
+    fondoCamino.setFitHeight(768);
+    fondoCamino1.setFitWidth(1024);
+    fondoCamino1.setFitHeight(768);
+    
+    root.getChildren().add(fondoCamino);
+    root.getChildren().add(fondoCamino1);
+    
+    // Gato Saltando
+    Image imageSalto = new Image ("saltoGato.gif");
+    ImageView gatoSaltar = new ImageView();
+    gatoSaltar.setImage(imageSalto);
+    gatoSaltar.setScaleX(4);
+    gatoSaltar.setScaleY(4);
+    
+    
+    
     AnimationTimer animationFondo = new AnimationTimer(){
     @Override
+    
+    //Movimiento de las montañas y el camino
+    
     public void handle (long now){
         fondoJuego.setX(pos1Fondo);
         fondoJuego1.setX(pos2Fondo1);
         pos1Fondo+=velocidad;
         pos2Fondo1+=velocidad;
         
-        if (pos1Fondo >= 1023){
-            
-                   
+        if (pos2Fondo1 == 0){
+            pos1Fondo = 1024;
+        }
+        if (pos1Fondo == 0){
+            pos2Fondo1 = 1024;         
         }
         
+        fondoCamino.setX(pos1FondoCamino);
+        fondoCamino1.setX(pos2FondoCamino);
+        pos1FondoCamino+= velocidadCamino;
+        pos2FondoCamino+=velocidadCamino;
+        
+        if (pos2FondoCamino==0){
+            pos1FondoCamino = 1024;
+        }
+        if (pos1FondoCamino== 0){
+            pos2FondoCamino= 1024;
+        }
         }
     };
     animationFondo.start();
+
+       scene.setOnKeyPressed((KeyEvent event)-> {
+        switch(event.getCode()){
+            case W:
+            //Cuando pulsamos tecla arriba.
+                        
+           
+        break;
+        }
+    });
+       scene.setOnKeyReleased((KeyEvent event) -> {
+
+    });    
     
-    
-    
-//    HBox fondo1= new HBox();
-//    fondo1.getChildren().add(fondoJuego);
-//    root.getChildren().add(fondo1);
-    
-     // Fondo 2
-    Image imageFondoCamino = new Image("fondoCamino.png");
-    ImageView fondoCamino = new ImageView();
-    fondoCamino.setImage(imageFondoCamino);
+
+   
      
      // Gato Caminando
     Image imageCaminar = new Image ("catWalk.gif");
@@ -84,12 +136,6 @@ int velocidad= -2 ;
     gatoCaminar.setScaleX(4);
     gatoCaminar.setScaleY(4);
  
-    // Gato Saltando
-    Image imageSalto = new Image ("saltoGato.gif");
-    ImageView gatoSaltar = new ImageView();
-    gatoSaltar.setImage(imageSalto);
-    gatoSaltar.setScaleX(4);
-    gatoSaltar.setScaleY(4);
     
     // Gato Muerto
     Image imageMuerte = new Image ("gatoMuerte.gif");
@@ -109,13 +155,7 @@ int velocidad= -2 ;
     
     
      // Creacion de grupos
-    
-    // Fondo 2
-    HBox fondo2 = new HBox();
-    fondo2.getChildren().add(fondoCamino);
-    root.getChildren().add(fondo2);
-    
-    
+
     // Gato movimiento andar
     HBox gatoMovimiento = new HBox();
     gatoMovimiento.getChildren().add(gatoCaminar);
@@ -144,12 +184,6 @@ int velocidad= -2 ;
     gallinaChicken.setLayoutY(600);
     root.getChildren().add(gallinaChicken);
     
-//    stage.setTitle("Salty Cats");
-//    stage.setWidth(1024);
-//    stage.setHeight(768);
-//    stage.setScene(scene); 
-//    stage.sizeToScene(); 
-//    stage.show();
   }
   
   public static void main(String[] args) {
