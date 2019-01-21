@@ -1,5 +1,6 @@
 package saltycat;
 
+import java.util.Random;
 import javafx.animation.AnimationTimer;
  import javafx.application.Application;
  import javafx.geometry.Rectangle2D;
@@ -11,6 +12,7 @@ import javafx.scene.input.KeyEvent;
  import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
  import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
  import javafx.stage.Stage; 
 
 public class SaltyCat extends Application {
@@ -25,12 +27,17 @@ int pos1FondoCamino= 0;
 int pos2FondoCamino= 1024;
 
 
-int velocidad= -2 ;
-int velocidadCamino = -4;
+int velocidad= -1 ;
+int velocidadCamino = -2;
 
+int score;
+Text textScore;
 
     @Override
   public void start(Stage stage){
+    
+    //Texto de score
+    textScore = new Text("0");
       
     Group root = new Group();
     Scene scene = new Scene(root, posicionX, posicionY);
@@ -78,6 +85,45 @@ int velocidadCamino = -4;
     gatoSaltar.setScaleX(4);
     gatoSaltar.setScaleY(4);
     
+    // Gallinas ANDANDO
+    Image imageChicken = new Image ("chicken.gif");
+    ImageView gallinaG1 = new ImageView();
+    ImageView gallinaG2 = new ImageView();
+    ImageView gallinaG3 = new ImageView();
+    
+    gallinaG1.setImage(imageChicken);
+    gallinaG2.setImage(imageChicken);
+    gallinaG3.setImage(imageChicken);
+    
+    gallinaG1.setScaleX(2);
+    gallinaG1.setScaleY(2);
+    
+    gallinaG2.setScaleX(2);
+    gallinaG2.setScaleY(2);
+    
+    gallinaG3.setScaleX(2);
+    gallinaG3.setScaleY(2);
+    
+    HBox gallinaGrupo1 = new HBox();
+    gallinaGrupo1.getChildren().add(gallinaG1);
+    gallinaGrupo1.setLayoutX(900);
+    gallinaGrupo1.setLayoutY(600);
+    root.getChildren().add(gallinaGrupo1);
+    
+    HBox gallinaGrupo2 = new HBox();
+    gallinaGrupo2.getChildren().add(gallinaG2);
+    gallinaGrupo2.setLayoutX(700);
+    gallinaGrupo2.setLayoutY(600);
+    root.getChildren().add(gallinaGrupo2);
+    
+    HBox gallinaGrupo3 = new HBox();
+    gallinaGrupo3.getChildren().add(gallinaG3);
+    gallinaGrupo3.setLayoutX(500);
+    gallinaGrupo3.setLayoutY(600);
+    root.getChildren().add(gallinaGrupo3);
+    
+
+    
     
     
     AnimationTimer animationFondo = new AnimationTimer(){
@@ -101,33 +147,33 @@ int velocidadCamino = -4;
         fondoCamino.setX(pos1FondoCamino);
         fondoCamino1.setX(pos2FondoCamino);
         pos1FondoCamino+= velocidadCamino;
-        pos2FondoCamino+=velocidadCamino;
+        pos2FondoCamino+= velocidadCamino;
         
         if (pos2FondoCamino==0){
             pos1FondoCamino = 1024;
         }
         if (pos1FondoCamino== 0){
-            pos2FondoCamino= 1024;
+            pos2FondoCamino = 1024;
         }
         }
     };
     animationFondo.start();
-
-       scene.setOnKeyPressed((KeyEvent event)-> {
-        switch(event.getCode()){
-            case W:
-            //Cuando pulsamos tecla arriba.
-                        
-           
-        break;
-        }
-    });
-       scene.setOnKeyReleased((KeyEvent event) -> {
-
-    });    
-    
-
-   
+//
+//       scene.setOnKeyPressed((KeyEvent event)-> {
+//        switch(event.getCode()){
+//            case W:
+//            //Cuando pulsamos tecla arriba.
+//                        
+//           
+//        break;
+//        }
+//    });
+//       scene.setOnKeyReleased((KeyEvent event) -> {
+//
+//    });    
+//    
+//
+//   
      
      // Gato Caminando
     Image imageCaminar = new Image ("catWalk.gif");
@@ -143,15 +189,6 @@ int velocidadCamino = -4;
     gatoMuerto.setImage(imageMuerte);
     gatoMuerto.setScaleX(4);
     gatoMuerto.setScaleY(4);
-    
-    // Gallina
-    Image imageChicken = new Image ("chicken.gif");
-    ImageView gallinaGF = new ImageView();
-    gallinaGF.setImage(imageChicken);
-    gallinaGF.setScaleX(2);
-    gallinaGF.setScaleY(2);
-    
-    
     
     
      // Creacion de grupos
@@ -177,13 +214,14 @@ int velocidadCamino = -4;
 //    gatoDie.setLayoutY(600);
 //    root.getChildren().add(gatoDie);
     
-    // Gallina picoteando
-    HBox gallinaChicken = new HBox();
-    gallinaChicken.getChildren().add(gallinaGF);
-    gallinaChicken.setLayoutX(900);
-    gallinaChicken.setLayoutY(600);
-    root.getChildren().add(gallinaChicken);
-    
+  }
+  
+  private void resetGame(){
+      score = 0;
+      textScore.setText(String.valueOf(score));
+      
+//      Random random = new Random();
+//      gallinaGrupo1.setLayoutX(900)= random.nextInt();
   }
   
   public static void main(String[] args) {
