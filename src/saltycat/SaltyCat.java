@@ -34,19 +34,22 @@ int score;
 Text textScore;
 
 //Gallina 1
-int pos1Gallina1= -100;
+int pos1Gallina1= 1100;
 //Gallina 2
-int pos1Gallina2= -300;
+int pos1Gallina2= 1400;
 //Gallina 3
-int pos1Gallina3= -500;
+int pos1Gallina3= 1700;
 //Gallina 4
-int pos1Gallina4= -700;
-
+int pos1Gallina4= 2000;
 
 int velocidadG=-2;
 
+Group gatoMovimiento;
+Group gatoSalto;
+
     @Override
   public void start(Stage stage){
+
     
     //Texto de score
     textScore = new Text("0");
@@ -127,50 +130,52 @@ int velocidadG=-2;
     gallinaG4.setScaleX(2);
     gallinaG4.setScaleY(2);
     
+    
     Group gallinaGrupo1 = new Group();
     gallinaGrupo1.getChildren().add(gallinaG1);
-    gallinaGrupo1.setLayoutX(900);
+    gallinaGrupo1.setLayoutX(pos1Gallina1);
     gallinaGrupo1.setLayoutY(600);
     root.getChildren().add(gallinaGrupo1);
     
     Group gallinaGrupo2 = new Group();
     gallinaGrupo2.getChildren().add(gallinaG2);
-    gallinaGrupo2.setLayoutX(900);
+    gallinaGrupo2.setLayoutX(pos1Gallina2);
     gallinaGrupo2.setLayoutY(600);
     root.getChildren().add(gallinaGrupo2);
-//    
-//    Group gallinaGrupo3 = new Group();
-//    gallinaGrupo3.getChildren().add(gallinaG3);
-//    gallinaGrupo3.setLayoutX(900);
-//    gallinaGrupo3.setLayoutY(600);
-//    root.getChildren().add(gallinaGrupo3);
-//    
-//    Group gallinaGrupo4 = new Group();
-//    gallinaGrupo4.getChildren().add(gallinaG4);
-//    gallinaGrupo4.setLayoutX(900);
-//    gallinaGrupo4.setLayoutY(600);
-//    root.getChildren().add(gallinaGrupo4);
     
-//    if ( pos1Gallina1 == 150){
-//        int separacion = aleatorio.nextInt(300);
-//        pos1Gallina1= pos1Gallina2 - separacion;
-//    }
-//    if ( pos1Gallina2 == 450){
-//        int separacion = aleatorio.nextInt(300);
-//        pos1Gallina2= pos1Gallina3 - separacion;
-//    }
-//    if ( pos1Gallina3 == 750){
-//        int separacion = aleatorio.nextInt(300);
-//        pos1Gallina3= pos1Gallina4 - separacion;
-//    }
-//    if ( pos1Gallina4 == 1050){
-//        int separacion = aleatorio.nextInt(300);
-//        pos1Gallina4= pos1Gallina1 - separacion;
-//    }
+    Group gallinaGrupo3 = new Group();
+    gallinaGrupo3.getChildren().add(gallinaG3);
+    gallinaGrupo3.setLayoutX(pos1Gallina3);
+    gallinaGrupo3.setLayoutY(600);
+    root.getChildren().add(gallinaGrupo3);
+    
+    Group gallinaGrupo4 = new Group();
+    gallinaGrupo4.getChildren().add(gallinaG4);
+    gallinaGrupo4.setLayoutX(pos1Gallina4);
+    gallinaGrupo4.setLayoutY(600);
+    root.getChildren().add(gallinaGrupo4);
+    
+    
+ 
+        int separacion = aleatorio.nextInt(300);
+        pos1Gallina1= 1100 + separacion;
+
+        separacion = aleatorio.nextInt(300);
+        pos1Gallina2= pos1Gallina1 + separacion;
+
+        separacion = aleatorio.nextInt(300);
+        pos1Gallina3= pos1Gallina2 + separacion;
+   
+        separacion = aleatorio.nextInt(300);
+        pos1Gallina4= pos1Gallina3 + separacion;
+
     
     
     AnimationTimer animationFondo = new AnimationTimer(){
     @Override
+    
+    
+    
     
     //Movimiento de las montañas y el camino
     
@@ -203,35 +208,48 @@ int velocidadG=-2;
         pos1Gallina1+=velocidadG;
         
         if (pos1Gallina1 == -110){
-            pos1Gallina1 = 1100 ;
+            pos1Gallina1 = pos1Gallina4+300 ;
         }      
         
         gallinaGrupo2.setLayoutX(pos1Gallina2);
         pos1Gallina2+=velocidadG;
         
-        if (pos1Gallina2 == -310){
-            pos1Gallina2 = 1100;
+        if (pos1Gallina2 == -110){
+            pos1Gallina2 = pos1Gallina1+300;
         } 
-//        
-//        gallinaG3.setX(pos1Gallina3);
-//        pos1Gallina3+=velocidadG;
-//        
-//        if (pos1Gallina3 == -1050){
-//            pos1Gallina3 = 150;
-//        } 
-//        
-//        gallinaG4.setX(pos1Gallina4);
-//        pos1Gallina4+=velocidadG;
-//        
-//        if (pos1Gallina4 == -1050){
-//            pos1Gallina4 = 150;
-//        } 
+        
+        gallinaGrupo3.setLayoutX(pos1Gallina3);
+        pos1Gallina3+=velocidadG;
+        
+        if (pos1Gallina3 == -110){
+            pos1Gallina3 = pos1Gallina2+300;
+        } 
+        
+        gallinaGrupo4.setLayoutX(pos1Gallina4);
+        pos1Gallina4+=velocidadG;
+        
+        if (pos1Gallina4 == -110){
+            pos1Gallina4 = pos1Gallina3+300;
+        } 
      
         
     } 
     };
     animationFondo.start();
   
+            scene.setOnKeyPressed((KeyEvent event)-> {
+            switch(event.getCode()){
+                case W:
+                    gatoMovimiento.setVisible(false);
+//                    gatoSalto.setVisible(true);
+                    gatoSalto.setLayoutX(300);
+                    
+                    break;
+            }
+        });
+        scene.setOnKeyReleased((KeyEvent event) -> {
+             
+        }); 
      
      // Gato Caminando
     Image imageCaminar = new Image ("catWalk.gif");
@@ -252,18 +270,18 @@ int velocidadG=-2;
      // Creacion de grupos
 
     // Gato movimiento andar
-    Group gatoMovimiento = new Group();
+    gatoMovimiento = new Group();
     gatoMovimiento.getChildren().add(gatoCaminar);
     gatoMovimiento.setLayoutX(150);
     gatoMovimiento.setLayoutY(600);
     root.getChildren().add(gatoMovimiento);
     
     // Gato movimiento saltar
-//    Group gatoSalto = new Group();
-//    gatoSalto.getChildren().add(gatoSaltar);
-//    gatoSalto.setLayoutX(150);
-//    gatoSalto.setLayoutY(600);
-//    root.getChildren().add(gatoSalto);
+    gatoSalto = new Group();
+    gatoSalto.getChildren().add(gatoSaltar);
+    gatoSalto.setLayoutX(150);
+    gatoSalto.setLayoutY(600);
+    root.getChildren().add(gatoSalto);
     
     // Gato muerto
 //    Group gatoDie = new Group();
@@ -281,8 +299,9 @@ int velocidadG=-2;
 //      Random random = new Random();
 //      gallinaGrupo1.setLayoutX(900)= random.nextInt();
   }
-  
+    
   public static void main(String[] args) {
          Application.launch(args);
      }
 }
+
