@@ -1,6 +1,7 @@
 package saltycat;
 
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import javafx.animation.AnimationTimer;
  import javafx.application.Application;
  import javafx.geometry.Rectangle2D;
@@ -14,8 +15,11 @@ import javafx.scene.layout.Pane;
  import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
  import javafx.stage.Stage; 
+import java.util.concurrent.ThreadLocalRandom;
 
 public class SaltyCat extends Application {
+    
+Random aleatorio = new Random();
     
 int posicionX= 1024;
 int posicionY= 768;
@@ -32,7 +36,7 @@ int velocidadCamino = -2;
 int score;
 Text textScore;
 
-int velocidadG=-2;
+int velocidadG=-4;
 
 ImageView fondoJuego = new ImageView();
 ImageView fondoJuego1 = new ImageView();
@@ -50,24 +54,33 @@ ImageView gallinaG3 = new ImageView();
 ImageView gallinaG4 = new ImageView();
 
 //Gallina 1
-int pos1Gallina1= 1100;
+int pos1Gallina1= ThreadLocalRandom.current().nextInt(1100, 1400); 
 //Gallina 2
-int pos1Gallina2= 1400;
+int pos1Gallina2= ThreadLocalRandom.current().nextInt(1700, 2000);
 //Gallina 3
-int pos1Gallina3= 1700;
+int pos1Gallina3= ThreadLocalRandom.current().nextInt(2300, 2600);
 //Gallina 4
-int pos1Gallina4= 2000;
+int pos1Gallina4= ThreadLocalRandom.current().nextInt(2900, 3100);
             
 
 Group root = new Group();
 Group gatoMovimiento;
-Group gatoSalto;
 Group gatoDie;
+
+Group gallinaGrupo1;
+Group gallinaGrupo2;
+Group gallinaGrupo3;
+Group gallinaGrupo4;
+
+
+
 
     @Override
   public void start(Stage stage){
-     
+      
+      
       fondosYGatos();
+      gashinitas();
     
     //Texto de score
     textScore = new Text("0");
@@ -84,25 +97,26 @@ Group gatoDie;
         public void handle (long now){
                 fondoMontañas();
                 fondoCamino();
+                crearMovimientoGato();
+                gallinasGrupo();
+                
             
         } 
     };
     
     animationFondo.start();
-//  
-//            scene.setOnKeyPressed((KeyEvent event)-> {
-//            switch(event.getCode()){
-//                case W:
-//                    gatoMovimiento.setVisible(false);
-////                    gatoSalto.setVisible(true);
-//                    gatoSalto.setLayoutX(300);
-//                    
-//                    break;
-//            }
-//        });
-//        scene.setOnKeyReleased((KeyEvent event) -> {
-//             
-//        }); 
+  
+            scene.setOnKeyPressed((KeyEvent event)-> {
+            switch(event.getCode()){
+                case W:
+                    
+
+                break;
+            }
+        });
+        scene.setOnKeyReleased((KeyEvent event) -> {
+             
+        }); 
   
   }
        private void fondosYGatos(){
@@ -146,13 +160,6 @@ Group gatoDie;
         gatoMuerto.setImage(imageMuerte);
         gatoMuerto.setScaleX(4);
         gatoMuerto.setScaleY(4);
-            
-        Image imageSalto = new Image ("saltoGato.gif");
-        gatoSaltar = new ImageView();
-        gatoSaltar.setImage(imageSalto);
-        gatoSaltar.setScaleX(4);
-        gatoSaltar.setScaleY(4);
-      
                    
         Image imageCaminar = new Image ("catWalk.gif");
         gatoCaminar = new ImageView();
@@ -186,6 +193,30 @@ Group gatoDie;
 
         gallinaG4.setScaleX(2);
         gallinaG4.setScaleY(2);
+        
+        gallinaGrupo1 = new Group();
+        gallinaGrupo1.getChildren().add(gallinaG1);
+        gallinaGrupo1.setLayoutX(pos1Gallina1);
+        gallinaGrupo1.setLayoutY(600);
+        root.getChildren().add(gallinaGrupo1);
+
+        gallinaGrupo2 = new Group();
+        gallinaGrupo2.getChildren().add(gallinaG2);
+        gallinaGrupo2.setLayoutX(pos1Gallina2);
+        gallinaGrupo2.setLayoutY(600);
+        root.getChildren().add(gallinaGrupo2);
+
+        gallinaGrupo3 = new Group();
+        gallinaGrupo3.getChildren().add(gallinaG3);
+        gallinaGrupo3.setLayoutX(pos1Gallina3);
+        gallinaGrupo3.setLayoutY(600);
+        root.getChildren().add(gallinaGrupo3);
+
+        gallinaGrupo4 = new Group();
+        gallinaGrupo4.getChildren().add(gallinaG4);
+        gallinaGrupo4.setLayoutX(pos1Gallina4);
+        gallinaGrupo4.setLayoutY(600);
+        root.getChildren().add(gallinaGrupo4);
        }
        
        private void fondoMontañas(){
@@ -225,15 +256,6 @@ Group gatoDie;
             root.getChildren().add(gatoDie); 
        }
        
-       private void crearSaltoGato(){
-
-            gatoSalto = new Group();
-            gatoSalto.getChildren().add(gatoSaltar);
-            gatoSalto.setLayoutX(150);
-            gatoSalto.setLayoutY(600);
-            root.getChildren().add(gatoSalto);
-       }
-       
        private void crearMovimientoGato(){
 
             gatoMovimiento = new Group();
@@ -245,73 +267,44 @@ Group gatoDie;
        
        private void gallinasGrupo(){
 
-        Random aleatorio = new Random();
-  
-        Group gallinaGrupo1 = new Group();
-        gallinaGrupo1.getChildren().add(gallinaG1);
-        gallinaGrupo1.setLayoutX(pos1Gallina1);
-        gallinaGrupo1.setLayoutY(600);
-        root.getChildren().add(gallinaGrupo1);
-
-        Group gallinaGrupo2 = new Group();
-        gallinaGrupo2.getChildren().add(gallinaG2);
-        gallinaGrupo2.setLayoutX(pos1Gallina2);
-        gallinaGrupo2.setLayoutY(600);
-        root.getChildren().add(gallinaGrupo2);
-
-        Group gallinaGrupo3 = new Group();
-        gallinaGrupo3.getChildren().add(gallinaG3);
-        gallinaGrupo3.setLayoutX(pos1Gallina3);
-        gallinaGrupo3.setLayoutY(600);
-        root.getChildren().add(gallinaGrupo3);
-
-        Group gallinaGrupo4 = new Group();
-        gallinaGrupo4.getChildren().add(gallinaG4);
-        gallinaGrupo4.setLayoutX(pos1Gallina4);
-        gallinaGrupo4.setLayoutY(600);
-        root.getChildren().add(gallinaGrupo4);
-
-    
- 
-        int separacion = aleatorio.nextInt(300);
-        pos1Gallina1= 1100 + separacion;
-
-        separacion = aleatorio.nextInt(300);
-        pos1Gallina2= pos1Gallina1 + separacion;
-
-        separacion = aleatorio.nextInt(300);
-        pos1Gallina3= pos1Gallina2 + separacion;
-   
-        separacion = aleatorio.nextInt(300);
-        pos1Gallina4= pos1Gallina3 + separacion;      
+        int min = 550;
+        int max = 1100;
         
         gallinaGrupo1.setLayoutX(pos1Gallina1);
         pos1Gallina1+=velocidadG;
         
-        if (pos1Gallina1 == -110){
-            pos1Gallina1 = 1100 ;
-        }      
         
+        
+        if (pos1Gallina1 <= -110){
+        int separacion = ThreadLocalRandom.current().nextInt(min, max);    
+          pos1Gallina1= pos1Gallina4 + separacion;
+        }      
+
         gallinaGrupo2.setLayoutX(pos1Gallina2);
         pos1Gallina2+=velocidadG;
         
-        if (pos1Gallina2 == -110){
-            pos1Gallina2 = pos1Gallina1+300;
+        if (pos1Gallina2 <= -110){
+           int separacion =ThreadLocalRandom.current().nextInt(min, max);
+            pos1Gallina2= pos1Gallina1 + separacion;
         } 
         
         gallinaGrupo3.setLayoutX(pos1Gallina3);
         pos1Gallina3+=velocidadG;
         
-        if (pos1Gallina3 == -110){
-            pos1Gallina3 = pos1Gallina2+300;
+        if (pos1Gallina3 <= -110){
+           int separacion = ThreadLocalRandom.current().nextInt(min, max);
+            pos1Gallina3= pos1Gallina2 + separacion;
         } 
         
         gallinaGrupo4.setLayoutX(pos1Gallina4);
         pos1Gallina4+=velocidadG;
         
-        if (pos1Gallina4 == -110){
-            pos1Gallina4 = pos1Gallina3+300;
-        }         
+        if (pos1Gallina4 <= -110){
+           int separacion = ThreadLocalRandom.current().nextInt(min, max);
+            pos1Gallina4= pos1Gallina1 + separacion;
+        }
+        
+
        }
   
   private void resetGame(){
