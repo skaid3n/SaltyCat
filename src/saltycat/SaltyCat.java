@@ -3,22 +3,25 @@ package saltycat;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import javafx.animation.AnimationTimer;
- import javafx.application.Application;
- import javafx.geometry.Rectangle2D;
- import javafx.scene.Group;
- import javafx.scene.Scene; 
- import javafx.scene.image.Image;
- import javafx.scene.image.ImageView;
+import javafx.application.Application;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Group;
+import javafx.scene.Scene; 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
- import javafx.scene.layout.HBox;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
- import javafx.scene.paint.Color;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
- import javafx.stage.Stage; 
+import javafx.stage.Stage; 
 import java.util.concurrent.ThreadLocalRandom;
+import javafx.geometry.Pos;
+import static javafx.scene.paint.Color.BLACK;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 
 public class SaltyCat extends Application {
-    
 Random aleatorio = new Random();
     
 int posicionX= 1024;
@@ -37,6 +40,9 @@ int score;
 Text textScore;
 
 int velocidadG=-4;
+
+final int TEXT_SIZE = 24;
+int hightScore;
 
 ImageView fondoJuego = new ImageView();
 ImageView fondoJuego1 = new ImageView();
@@ -62,7 +68,6 @@ int pos1Gallina3= ThreadLocalRandom.current().nextInt(2300, 2600);
 //Gallina 4
 int pos1Gallina4= ThreadLocalRandom.current().nextInt(2900, 3100);
             
-
 Group root = new Group();
 Group gatoMovimiento;
 Group gatoDie;
@@ -72,13 +77,14 @@ Group gallinaGrupo2;
 Group gallinaGrupo3;
 Group gallinaGrupo4;
 
-
-
+int gatoVel = 0;
+int gatoY = 600;
+int gatoX = 150; 
+int gatoYsalto = 0;
+int gatoLimit=600;
 
     @Override
-  public void start(Stage stage){
-      
-      
+  public void start(Stage stage){  
       fondosYGatos();
       gashinitas();
     
@@ -90,38 +96,89 @@ Group gallinaGrupo4;
     stage.setScene(scene);
     stage.show();
     
+    //Layout principal
+    HBox paneScores = new HBox();
+    paneScores.setTranslateY(20);
+    paneScores.setMinWidth(posicionX);
+    paneScores.setAlignment(Pos.CENTER);
+    paneScores.setSpacing(100);
+    root.getChildren().add(paneScores);
+    //Layout puntuacion actual
+    HBox paneActualScores = new HBox();
+    paneActualScores.setSpacing(10);
+    paneScores.getChildren().add(paneActualScores);
+    //Layout puntuacion maxima
+    HBox paneMaximaScores = new HBox();
+    paneMaximaScores.setSpacing(10);
+    paneScores.getChildren().add(paneMaximaScores);
+    //Texto de etiqueta para puntuacion
+    Text textoTituloPuntuacion = new Text("Score");
+    textoTituloPuntuacion.setFont(Font.font(TEXT_SIZE));
+    textoTituloPuntuacion.setFill(Color.BLUE);
+     //Texto para puntuacion
+    textScore = new Text("0");
+    textScore.setFont(Font.font(TEXT_SIZE));
+    textScore.setFill(Color.BLUE);
+    //Texto de etiqueta para puntuacion maxima
+    Text textoTituloMaximaPuntuacion = new Text("Max.Score");
+    textoTituloMaximaPuntuacion.setFont(Font.font(TEXT_SIZE));
+    textoTituloMaximaPuntuacion.setFill(Color.BLUE);
+    //Texto para puntuacion
+    Text textoMaximaPuntuacion = new Text("0");
+    textoMaximaPuntuacion.setFont(Font.font(TEXT_SIZE));
+    textoMaximaPuntuacion.setFill(Color.BLUE);
+    //Añadir los textos a los layaut reservados
+    paneActualScores.getChildren().add(textoTituloPuntuacion);
+    paneActualScores.getChildren().add(textScore);
+    paneMaximaScores.getChildren().add(textoTituloMaximaPuntuacion);
+    paneMaximaScores.getChildren().add(textoMaximaPuntuacion);
     
+        
+        
     AnimationTimer animationFondo = new AnimationTimer(){
-    @Override
-    
+    @Override  
         public void handle (long now){
                 fondoMontañas();
                 fondoCamino();
                 crearMovimientoGato();
-                gallinasGrupo();
+                gallinasGrupo();    
                 
+            if(score>hightScore){
+                //Cambiar puntuacion mas alta
+                hightScore=score;
+                textoMaximaPuntuacion.setText(String.valueOf(hightScore));
+            }
+            gatoY += gatoVel;
             
-        } 
+
+        }     
     };
     
     animationFondo.start();
-  
             scene.setOnKeyPressed((KeyEvent event)-> {
             switch(event.getCode()){
                 case W:
-                    
+                     gatoVel=-4;  
 
                 break;
+                
+                case R:
+                    this.resetGame();
+                    animationFondo.start();
+                    break;
             }
         });
-        scene.setOnKeyReleased((KeyEvent event) -> {
-             
-        }); 
-  
+        scene.setOnKeyReleased((KeyEvent event) -> {   
+           gatoVel= +4;
+           
+
+        });  
   }
        private void fondosYGatos(){
                    // Imagen fondo montañas 
         Image imageFondo = new Image("fondo.png");
+        
+
 
         fondoJuego = new ImageView();
         fondoJuego1 = new ImageView();
@@ -138,6 +195,13 @@ Group gallinaGrupo4;
         root.getChildren().add(fondoJuego1);
         
         Image imageFondoCamino = new Image("fondoCamino.png");
+        
+        Rectangle suelo = new Rectangle();
+        suelo.setWidth(1024);
+        suelo.setHeight(10);
+        suelo.setY(670);
+        suelo.setFill(BLACK);
+        
 
         fondoCamino = new ImageView();
         fondoCamino1 = new ImageView();
@@ -153,6 +217,7 @@ Group gallinaGrupo4;
 
         root.getChildren().add(fondoCamino);
         root.getChildren().add(fondoCamino1);
+        root.getChildren().add(suelo);
         
                     
         Image imageMuerte = new Image ("gatoMuerte.gif");
@@ -167,7 +232,9 @@ Group gallinaGrupo4;
         gatoCaminar.setScaleX(4);
         gatoCaminar.setScaleY(4);
  
-       }
+ 
+        
+        }
        
        private void gashinitas(){
         Image imageChicken = new Image ("chicken.gif");
@@ -257,13 +324,14 @@ Group gallinaGrupo4;
        }
        
        private void crearMovimientoGato(){
-
+            
             gatoMovimiento = new Group();
             gatoMovimiento.getChildren().add(gatoCaminar);
-            gatoMovimiento.setLayoutX(150); 
-            gatoMovimiento.setLayoutY(600);
+            gatoMovimiento.setLayoutX(gatoX); 
+            gatoMovimiento.setLayoutY(gatoY);
             root.getChildren().add(gatoMovimiento);
-     }
+            
+     }   
        
        private void gallinasGrupo(){
 
@@ -272,9 +340,7 @@ Group gallinaGrupo4;
         
         gallinaGrupo1.setLayoutX(pos1Gallina1);
         pos1Gallina1+=velocidadG;
-        
-        
-        
+
         if (pos1Gallina1 <= -110){
         int separacion = ThreadLocalRandom.current().nextInt(min, max);    
           pos1Gallina1= pos1Gallina4 + separacion;
@@ -303,14 +369,40 @@ Group gallinaGrupo4;
            int separacion = ThreadLocalRandom.current().nextInt(min, max);
             pos1Gallina4= pos1Gallina1 + separacion;
         }
-        
-
        }
   
   private void resetGame(){
       score = 0;
       textScore.setText(String.valueOf(score));
       
+
+    posicionX= 1024;
+    posicionY= 768;
+
+    pos1Fondo= 0;
+    pos2Fondo1= 1024;
+
+    pos1FondoCamino= 0;
+    pos2FondoCamino= 1024;
+
+    velocidad= -1 ;
+    velocidadCamino = -2;
+    velocidadG=-4;
+
+
+    //Gallina 1
+    pos1Gallina1= ThreadLocalRandom.current().nextInt(1100, 1400); 
+    //Gallina 2
+    pos1Gallina2= ThreadLocalRandom.current().nextInt(1700, 2000);
+    //Gallina 3
+    pos1Gallina3= ThreadLocalRandom.current().nextInt(2300, 2600);
+    //Gallina 4
+    pos1Gallina4= ThreadLocalRandom.current().nextInt(2900, 3100);
+
+//    gatoVel = 0;
+    gatoY = 600;
+    gatoX = 150; 
+    gatoYsalto = 0;
 //      Random random = new Random();
 //      gallinaGrupo1.setLayoutX(900)= random.nextInt();
   }
