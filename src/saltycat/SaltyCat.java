@@ -18,7 +18,9 @@ import javafx.stage.Stage;
 import java.util.concurrent.ThreadLocalRandom;
 import javafx.geometry.Pos;
 import static javafx.scene.paint.Color.BLACK;
+import static javafx.scene.paint.Color.BLUE;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
 
 public class SaltyCat extends Application {
@@ -83,10 +85,16 @@ int gatoX = 150;
 int gatoYsalto = 0;
 int gatoLimit=600;
 
+Rectangle suelo;
+Rectangle gatoCuerpo;
+
     @Override
   public void start(Stage stage){  
       fondosYGatos();
       gashinitas();
+      
+      
+      
     
     //Texto de score
     textScore = new Text("0");
@@ -142,14 +150,15 @@ int gatoLimit=600;
                 fondoCamino();
                 crearMovimientoGato();
                 gallinasGrupo();    
-                
-            if(score>hightScore){
+                rectanguloGato();
+
+                if(score>hightScore){
                 //Cambiar puntuacion mas alta
                 hightScore=score;
                 textoMaximaPuntuacion.setText(String.valueOf(hightScore));
             }
             gatoY += gatoVel;
-            
+//            Shape colision = Shape.intersect(suelo, );
 
         }     
     };
@@ -196,12 +205,13 @@ int gatoLimit=600;
         
         Image imageFondoCamino = new Image("fondoCamino.png");
         
-        Rectangle suelo = new Rectangle();
+        suelo = new Rectangle();
         suelo.setWidth(1024);
         suelo.setHeight(10);
         suelo.setY(670);
         suelo.setFill(BLACK);
         
+
 
         fondoCamino = new ImageView();
         fondoCamino1 = new ImageView();
@@ -217,9 +227,9 @@ int gatoLimit=600;
 
         root.getChildren().add(fondoCamino);
         root.getChildren().add(fondoCamino1);
-        root.getChildren().add(suelo);
         
-                    
+        root.getChildren().add(suelo);
+       
         Image imageMuerte = new Image ("gatoMuerte.gif");
         gatoMuerto = new ImageView();
         gatoMuerto.setImage(imageMuerte);
@@ -232,7 +242,15 @@ int gatoLimit=600;
         gatoCaminar.setScaleX(4);
         gatoCaminar.setScaleY(4);
  
- 
+                   
+            gatoCuerpo = new Rectangle();
+            gatoCuerpo.setWidth(50);
+            gatoCuerpo.setHeight(100);
+            gatoCuerpo.setY(570);
+            gatoCuerpo.setX(130);
+            gatoCuerpo.setFill(BLUE);
+            gatoCuerpo.setVisible(true);
+            
         
         }
        
@@ -324,12 +342,17 @@ int gatoLimit=600;
        }
        
        private void crearMovimientoGato(){
-            
+
+
             gatoMovimiento = new Group();
             gatoMovimiento.getChildren().add(gatoCaminar);
+            gatoMovimiento.getChildren().add(gatoCuerpo);
             gatoMovimiento.setLayoutX(gatoX); 
             gatoMovimiento.setLayoutY(gatoY);
+            
+            root.getChildren().add(gatoCuerpo);
             root.getChildren().add(gatoMovimiento);
+
             
      }   
        
@@ -406,7 +429,11 @@ int gatoLimit=600;
 //      Random random = new Random();
 //      gallinaGrupo1.setLayoutX(900)= random.nextInt();
   }
-    
+  
+  private void rectanguloGato() {
+      gatoCuerpo.setY(gatoY);
+      
+  }
   public static void main(String[] args) {
          Application.launch(args);
      }
